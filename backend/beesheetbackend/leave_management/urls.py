@@ -16,5 +16,6 @@ urlpatterns = [
     path('cancel-leave-application/employee/<int:empId>/<int:leave_app_id>/' , CancelLeaveApplication.as_view()),
     path('all-leave-application/', LeaveApplicationAll.as_view()),
     path('leave-counts/<int:emp_id>/' , LeaveSummaryData.as_view()),
+    path('manager-leave-create/<int:pk>/', ManagerLeaveApplicationList.as_view()),
 
 ]

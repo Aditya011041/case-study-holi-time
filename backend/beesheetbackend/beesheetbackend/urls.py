@@ -23,4 +23,5 @@ urlpatterns = [
     path('', include('leave_management.urls')),
     path('' , include('projectmanager.urls')),
     path('', include('notifications.urls')),
+    path('', include('projects.urls')),
 ]

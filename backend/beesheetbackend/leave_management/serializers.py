@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from projectmanager.models import ProjManager
 from .models import LeaveApplication, LeaveSummary , LeaveType
 
 
@@ -11,6 +13,7 @@ class LeaveApplicationSerializer(serializers.ModelSerializer):
     employee_name = serializers.SerializerMethodField()
     employee_email = serializers.SerializerMethodField()
     leave_type_name = serializers.SerializerMethodField()
+   
 
     class Meta:
         model = LeaveApplication

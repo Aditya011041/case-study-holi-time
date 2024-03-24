@@ -37,7 +37,7 @@
   }
 }
 #root{
-background-image: url('./components/pic3.jpg');
+background-image: url('../src/assets/pictures/pic3.jpg');
 background-repeat: no-repeat;
 background-size: cover;
 background-position: center;

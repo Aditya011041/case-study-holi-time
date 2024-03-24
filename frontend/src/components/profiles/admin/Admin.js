@@ -1,15 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Navbar, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './sidebar.css';
-import './manager.css';
 import { useLocation, useNavigate } from 'react-router-dom';
-
-
-
-
-
+import CustomNavbar from '../../../layouts/navbars/AdminNavBar';
+import LeaveTypeManagement from './LeavesTypes';
 
 
 
@@ -17,8 +11,9 @@ function Admin() {
     const [leaveApplications, setLeaveApplications] = useState([]);
     const [selectedLeaveApplication, setSelectedLeaveApplication] = useState(null);
     const locate = useLocation();
-    const id = locate.state?.emp_id;
+    // const id = locate.state?.emp_id;
     const navigate = useNavigate();
+    const [superuser, setSuperuser] = useState(false);
 
 
     useEffect(() => {
@@ -33,6 +28,10 @@ function Admin() {
                 console.error('Error:', error.message);
             }
         };
+        const superuserValue = sessionStorage.getItem('superuser');
+        if (superuserValue){
+        setSuperuser(superuserValue === 'true');
+        }
         console.log('3')
         fetchData();
         console.log('4')
@@ -73,23 +72,9 @@ function Admin() {
 
     return (
         <>
+        <div className='container-fluid'>
             <div className='container-fluid'>
-                <Navbar bg="dark" variant="dark" style={{ borderRadius: '10px', boxShadow: '0 4px 8px rgba(0,0,0,0.6)' }}>
-                    <Navbar.Brand href="https://www.beehyv.com/">
-                        <img src="https://www.beehyv.com/wp-content/uploads/2020/10/logo.svg" alt="Logo" className="img-fluid ms-1" style={{ height: '50px' }} />
-                    </Navbar.Brand>
-                    <Nav className="ml-auto">
-                        <Nav.Link href="/admin">Home</Nav.Link>
-                    </Nav>
-                    <Navbar.Brand style={{ marginLeft: '280px' }}>
-                        <h1>Admin Panel</h1>
-                    </Navbar.Brand>
-                    <Navbar.Brand style={{ marginLeft: '25rem' }}>
-                        <button className='btn  btn-lg btn-floating logout' onClick={handleLogout}>
-                            <span>Log out</span>
-                        </button>
-                    </Navbar.Brand>
-                </Navbar>
+               <CustomNavbar/>
             </div>
 
             <div>
@@ -153,6 +138,9 @@ function Admin() {
                         </div>
                     </div>
                 </div>
+               < LeaveTypeManagement  superuser={superuser}/>
+
+            </div>
             </div>
         </>
     );

@@ -5,19 +5,19 @@ from projectmanager.models import ProjManager
 
 #model for types of leaves : --------------------------------
 class LeaveType(models.Model):
-    CASUAL = 'Casual'
-    SICK = 'Sick'
-    EMERGENCY = 'Emergency'
-    WFH = 'Work from Home'
+    # CASUAL = 'Casual'
+    # SICK = 'Sick'
+    # EMERGENCY = 'Emergency'
+    # WFH = 'Work from Home'
 
-    LEAVE_TYPE_CHOICES = [
-        (CASUAL, 'Casual'),
-        (SICK, 'Sick'),
-        (EMERGENCY, 'Emergency'),
-        (WFH, 'Work from Home'),
-    ]
+    # LEAVE_TYPE_CHOICES = [
+    #     (CASUAL, 'Casual'),
+    #     (SICK, 'Sick'),
+    #     (EMERGENCY, 'Emergency'),
+    #     (WFH, 'Work from Home'),
+    # ]
 
-    name = models.CharField(max_length=100, choices=LEAVE_TYPE_CHOICES)
+    name = models.CharField(max_length=100)
     days_allocated = models.PositiveIntegerField()
 
 
@@ -33,6 +33,8 @@ class LeaveApplication(models.Model):
     status = models.CharField(default='PENDING', max_length=20)
     managers = models.ManyToManyField(ProjManager, blank=True)
     superuser_changed_status = models.BooleanField(default=False)
+    reason = models.TextField(blank=True)
+    submitted_by = models.CharField(max_length=20, default='employee')
 
     def __str__(self):
         return f"{self.employee.name} - {self.leave_type.name}"

@@ -1,35 +1,39 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import backgroundImage from 'C:/Desktop/almost-done/frontend/src/bg.jpg';
+import backgroundImage from '../../assets/pictures/bg.jpg';
 
 export default function Login() {
-    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [password, setPassword] = useState(''); // Added state for password
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!name || !email) {
+        if (!email || !password) { // Check for both email and password
             alert('Please fill in all fields.');
             return;
         }
+        const passwordString = password.toString();
 
         try {
             const response = await axios.post('http://127.0.0.1:8000/login', {
-                email,name
+                email,
+                password, 
             }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
 
-            const { emp_id, is_manager, manager_Id, token ,superuser, message} = response.data;
+            const { emp_id, is_manager, manager_Id, token, superuser, message } = response.data;
+            console.log(superuser)
             sessionStorage.setItem('token', token);
             if (superuser) {
                 alert('You are logged in as an admin.');
-                navigate('/admin', { state: {emp_id, token } });
+                navigate('/admin', { state: { emp_id, token  , superuser} });
                 sessionStorage.setItem('isLoggedIn', 'true');
+                sessionStorage.setItem('superuser', 'true');
             } else if (is_manager) {
                 alert(message);
                 navigate('/manager-dashboard', { state: { manager_Id, token } });
@@ -44,6 +48,9 @@ export default function Login() {
             console.error('Error:', error.message);
         }
     };
+    const handleRegister = () => {
+        navigate('/register');
+    }
 
     return (
         <section className="vh-100" style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover' }}>
@@ -73,31 +80,34 @@ export default function Login() {
                                             </h5>
                                             <div className="form-outline mb-4">
                                                 <label className="form-label" htmlFor="form2Example17">
-                                                    Name
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    id="form2Example17"
-                                                    className="form-control form-control-lg bg-muted"
-                                                    value={name}
-                                                    onChange={(e) => setName(e.target.value)}
-                                                />
-                                            </div>
-                                            <div className="form-outline mb-4">
-                                                <label className="form-label" htmlFor="form2Example27">
                                                     Email address
                                                 </label>
                                                 <input
                                                     type="email"
-                                                    id="form2Example27"
+                                                    id="form2Example17"
                                                     className="form-control form-control-lg bg-muted"
                                                     value={email}
                                                     onChange={(e) => setEmail(e.target.value)}
                                                 />
                                             </div>
-                                            <div className="pt-1 mb-4">
-                                                <button className="btn btn-dark btn-lg btn-block" type="submit">
+                                            <div className="form-outline mb-4">
+                                                <label className="form-label" htmlFor="form2Example27">
+                                                    Password
+                                                </label>
+                                                <input
+                                                    type="password"
+                                                    id="form2Example27"
+                                                    className="form-control form-control-lg bg-muted"
+                                                    value={password}
+                                                    onChange={(e) => setPassword(e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="pt-1 mb-4 ">
+                                                <button className="btn btn-dark btn-lg btn-block mx-3" type="submit">
                                                     Login
+                                                </button>
+                                                <button className="btn btn-dark btn-lg btn-block" type="submit" onClick={handleRegister}>
+                                                    Sign Up
                                                 </button>
                                             </div>
 

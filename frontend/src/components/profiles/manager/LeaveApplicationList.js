@@ -30,6 +30,19 @@ const LeaveApplicationList = ({ managerId }) => {
       const res = await axios.patch(`http://127.0.0.1:8000/leaveapplicationlist/manager/${managerId}/${leaveAppId}/`, {
         action: action,
       });
+      console.log(res);
+      
+      const managerDecision = res.data.manager_decision;
+
+      console.log('Manager decision:', managerDecision);
+  
+      // Now you can access properties of managerDecision object
+      if (managerDecision && managerDecision.manager_id && managerDecision.decision) {
+        console.log('Manager ID:', managerDecision.manager_id);
+        console.log('Decision:', managerDecision.decision);
+      } else {
+        console.error('Invalid manager decision:', managerDecision);
+      }
       
       setLeaveApplications(prevLeaveApplications => {
         const updatedLeaveApplications = prevLeaveApplications.map(leaveApp => {
@@ -41,13 +54,17 @@ const LeaveApplicationList = ({ managerId }) => {
         return updatedLeaveApplications;
       });
     } catch (error) {
-      alert(error.response.data.error)
+      if (error.response.status === 404 && error.response.data.superuser_changed_status) {
+        alert('Status changed by admin. Further changes denied.');
+      } else {
+        alert(error.response.data.error);
+      }
     }
   };
 
   return (
     <div>
-      <div className='p-3' style={{ overflowX: 'auto', marginLeft: '25%', width: "52%" }}>
+      <div className='p-3' style={{ marginLeft: '25%', width: "52%" }}>
         <table className="table align-middle mb-0" style={{ padding: '2px', borderCollapse: 'collapse', width: '100%' }}>
           <thead className="bg-light" style={{ borderTop: '4px solid #7312b4', padding: '8px' }}>
             <tr>
@@ -72,7 +89,7 @@ const LeaveApplicationList = ({ managerId }) => {
                     <button className="btn btn-secondary dropdown-toggle" type="button" id={`dropdownMenuButton${leaveApp.id}`} data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true" defaultValue>
                       Actions
                     </button>
-                    <ul className="dropdown-menu " aria-labelledby={`dropdownMenuButton${leaveApp.id}`}>
+                    <ul className="dropdown-menu dropdown-menu-right " aria-labelledby={`dropdownMenuButton${leaveApp.id}`} style={{overflow:'visible'}}>
                       <li><button className="dropdown-item" onClick={() => handleManagerAction('approve', leaveApp.id)}>Approve</button></li>
                       <li><button className="dropdown-item" onClick={() => handleManagerAction('reject', leaveApp.id)}>Reject</button></li>
                       <li><button className="dropdown-item" onClick={() => handleManagerAction('pending', leaveApp.id)}>Leave Pending</button></li>

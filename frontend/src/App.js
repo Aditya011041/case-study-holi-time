@@ -1,10 +1,12 @@
-import './App.css';
-import EmpDetail from './components/EmpDetail';
-import LeaveApplicationForm from './components/LeaveApplicationForm';
-import Login from './components/Login';
+import './App.css'
+import EmpDetail from './components/profiles/employee/EmpDetail';
+import LeaveApplicationForm from './layouts/forms/LeaveApplicationForm';
+import Login from './layouts/forms/Login';
 import {BrowserRouter, Routes, Route} from "react-router-dom";
-import ManagerDetail from './components/ManagerDetail';
-import Admin from './components/Admin';
+import ManagerDetail from './components/profiles/manager/ManagerDetail';
+import Admin from './components/profiles/admin/Admin';
+import EmployeeSignupForm from './components/profiles/employee/Register';
+import ProjectForm from './components/profiles/admin/ProjectCreate';
 
 function App() {
   return (
@@ -14,10 +16,12 @@ function App() {
 <Routes>
   
   <Route path="/" element={<Login/>} />
+  <Route path="/register" element={<EmployeeSignupForm />} />
+  <Route path="/projects" element={<ProjectForm />} />
   <Route path="/detail" element={<EmpDetail />} />
   <Route path="/leave" element={<LeaveApplicationForm/>} />
   <Route path = "/manager-dashboard" element={<ManagerDetail/>}/>
-  <Route path ="/admin" element={<Admin/>} />
+  <Route path ="/admin" element={<Admin/>}/>
 </Routes>
 </BrowserRouter>
      
